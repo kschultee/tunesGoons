@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+# main.js bundle file
+server/public/main.js
