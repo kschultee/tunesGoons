@@ -6,7 +6,7 @@ class Login extends React.Component {
     return (
       <div className='Begin'>
         Hello, please log in with Spotify
-        <button className='login'>
+        <button className='login' onClick={ () => window.location = 'http://localhost:300/login'}>
           Log in
         </button>
       </div>
