@@ -12,7 +12,7 @@ class Login extends React.Component {
         <div className='header-content'>
           <h1>Welcome to tunesGoons</h1>
           <p>Please log in with Spotify to continue!</p>
-          <button className='login' onClick={ () => window.location = 'http://localhost:3000/login'}>
+          <button className='login' onClick={ () => location.pathname = '/login'}>
             Log in
           </button>
         </div>
