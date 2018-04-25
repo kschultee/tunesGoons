@@ -48,9 +48,5 @@ app.get('/callback', (req, res) => {
   })
 })
 
-app.get('/landing', (req, res) => {
-  res.send('Logged in!')
-})
-
 console.log(`Listening on port` + process.env.PORT)
 app.listen(process.env.PORT)
