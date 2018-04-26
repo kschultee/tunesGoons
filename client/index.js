@@ -10,6 +10,14 @@ class App extends React.Component {
       hasAccess: false
     }
   }
+  componentDidMount() {
+    let accessToken = new URLSearchParams(location.search).get('access_token')
+    if (typeof accessToken === 'string') {
+      this.setState({
+        hasAccess: true
+      })
+    }
+  }
   render() {
     return (
       <div className='App'>

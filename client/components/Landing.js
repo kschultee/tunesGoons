@@ -1,6 +1,10 @@
 import React from 'react'
 
 class Landing extends React.Component {
+  componentDidMount() {
+    let accessToken = new URLSearchParams(location.search).get('access_token')
+    console.log(accessToken)
+  }
   render() {
     return (
       <header className = 'v-header container'>
