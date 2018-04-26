@@ -3,9 +3,11 @@ import React from 'react'
 class Landing extends React.Component {
   render() {
     return (
-      <div className = 'home'>
-        You did it!
-      </div>
+      <header className = 'v-header container'>
+        <div className = 'header-content'>
+          <p style={{color: 'black'}}>Welcome to Your Library!</p>
+        </div>
+      </header>
     )
   }
 }
