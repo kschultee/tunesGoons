@@ -12,6 +12,7 @@ const staticMiddleware = express.static(publicPath)
 
 app.use(staticMiddleware)
 
+let access_token
 const redirect_uri = process.env.REDIRECT_URI
 
 app.get('/login', (req, res) => {
@@ -42,9 +43,22 @@ app.get('/callback', (req, res) => {
   }
   request.post(authOptions, (error, response, body) => {
     if (error) throw error
-    var access_token = body.access_token
+    access_token = body.access_token
     let uri = process.env.LANDING_URI
     res.redirect(uri + '?access_token=' + access_token)
+  })
+})
+
+app.get('/library', (req, res) => {
+  let songOptions = {
+    url: 'https://api.spotify.com/v1/me/tracks',
+    headers: {
+      'Authorization': 'Bearer ' + access_token
+    }
+  }
+  request.get(songOptions, (error, response, body) => {
+    console.log(error)
+    res.send(body)
   })
 })
 

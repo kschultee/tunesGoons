@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Login from './components/Login.js'
-import Landing from './components/Landing.js'
+import Library from './components/Library.js'
 
 class App extends React.Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class App extends React.Component {
   render() {
     return (
       <div className='App'>
-        {this.state.hasAccess ? <Landing /> : <Login />}
+        {this.state.hasAccess ? <Library /> : <Login />}
       </div>
     )
   }
