@@ -19,23 +19,34 @@ class Library extends React.Component {
   render() {
     console.log(this.state.songs, Array.isArray(this.state.songs))
     const songList = Array.isArray(this.state.songs) ? (
-      <div className = 'songList'>
-        {this.state.songs.map(songs => (
-          <div className='song' key={songs.track.name}>
-            <h4>{songs.track.name}</h4>
-          </div>
-        ))}
-      </div>
+      <table className = 'table table-striped table-hover table-dark'>
+        <thead>
+          <tr>
+            <th scope='col'>Song</th>
+            <th scope='col'>Artist</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.songs.map(songs => (
+            <tr key={songs.track.name}>
+              <th scope='row'>{songs.track.name}</th>
+              <td>{songs.track.artists[0].name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     ) : (
       null
     )
     return (
-      <header className = 'v-header container'>
-        <div className = 'header-content'>
-          <p style={{color: 'black'}}>Welcome to Your Library!</p>
+      <div className='container'>
+        <div>
+          <h1 style={{color: '#fff'}}>Welcome to Your Library!</h1>
         </div>
-        {songList}
-      </header>
+        <div>
+          {songList}
+        </div>
+      </div>
     )
   }
 }

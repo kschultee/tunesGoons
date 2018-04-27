@@ -51,7 +51,7 @@ app.get('/callback', (req, res) => {
 
 app.get('/library', (req, res) => {
   let songOptions = {
-    url: 'https://api.spotify.com/v1/me/tracks',
+    url: 'https://api.spotify.com/v1/me/tracks?offset=0&limit=50',
     headers: {
       'Authorization': 'Bearer ' + access_token
     }
