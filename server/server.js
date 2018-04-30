@@ -19,7 +19,7 @@ app.get('/login', (req, res) => {
     querystring.stringify({
       response_type: 'code',
       client_id: process.env.SPOTIFY_CLIENT_ID,
-      scope: 'user-read-private user-read-email user-library-read',
+      scope: 'user-read-private user-read-email user-library-read user-read-playback-state',
       redirect_uri
     }))
 })
@@ -57,6 +57,21 @@ app.get('/library', (req, res) => {
   }
   request.get(songOptions, (error, response, body) => {
     if (error) {
+      res.sendStatus(400)
+    }
+    res.send(body)
+  })
+})
+
+app.get('/playback', (req, res) => {
+  let playbackOptions = {
+    url: 'https://api.spotify.com/v1/me/player/currently-playing',
+    headers: {
+      'Authorization': 'Bearer ' + req.query.access_token
+    }
+  }
+  request.get(playbackOptions, (err, response, body) => {
+    if (err) {
       res.sendStatus(400)
     }
     res.send(body)

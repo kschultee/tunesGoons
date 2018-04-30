@@ -1,4 +1,5 @@
 import React from 'react'
+import Media from './Media.js'
 
 class Library extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class Library extends React.Component {
         <div>
           {songList}
         </div>
+        <Media />
       </div>
     )
   }
