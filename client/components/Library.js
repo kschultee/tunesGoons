@@ -8,7 +8,8 @@ class Library extends React.Component {
     }
   }
   componentDidMount() {
-    fetch('/library')
+    const accessToken = new URLSearchParams(location.search).get('access_token')
+    fetch('/library?access_token=' + accessToken)
       .then(res => res.json())
       .then(data =>
         this.setState({
@@ -17,7 +18,6 @@ class Library extends React.Component {
       )
   }
   render() {
-    console.log(this.state.songs, Array.isArray(this.state.songs))
     const songList = Array.isArray(this.state.songs) ? (
       <table className = 'table table-striped table-hover table-dark'>
         <thead>

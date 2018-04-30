@@ -12,7 +12,7 @@ class App extends React.Component {
     }
   }
   componentDidMount() {
-    let accessToken = new URLSearchParams(location.search).get('access_token')
+    const accessToken = new URLSearchParams(location.search).get('access_token')
     if (typeof accessToken === 'string') {
       this.setState({
         hasAccess: true
