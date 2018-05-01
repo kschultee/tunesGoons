@@ -19,14 +19,14 @@ app.get('/login', (req, res) => {
     querystring.stringify({
       response_type: 'code',
       client_id: process.env.SPOTIFY_CLIENT_ID,
-      scope: 'user-read-private user-read-email user-library-read user-read-playback-state',
+      scope: 'user-read-private user-read-email user-library-read user-read-playback-state streaming user-read-recently-played user-modify-playback-state user-read-currently-playing user-read-birthdate playlist-modify-public',
       redirect_uri
     }))
 })
 
 app.get('/callback', (req, res) => {
-  let code = req.query.code
-  let authOptions = {
+  const code = req.query.code
+  const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code: code,
@@ -49,7 +49,7 @@ app.get('/callback', (req, res) => {
 })
 
 app.get('/library', (req, res) => {
-  let songOptions = {
+  const songOptions = {
     url: 'https://api.spotify.com/v1/me/tracks?offset=0&limit=50',
     headers: {
       'Authorization': 'Bearer ' + req.query.access_token
@@ -64,7 +64,7 @@ app.get('/library', (req, res) => {
 })
 
 app.get('/playback', (req, res) => {
-  let playbackOptions = {
+  const playbackOptions = {
     url: 'https://api.spotify.com/v1/me/player/currently-playing',
     headers: {
       'Authorization': 'Bearer ' + req.query.access_token
