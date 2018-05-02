@@ -16,8 +16,7 @@ class Library extends React.Component {
         image: ''
       }
     }
-    this.skip = this.skip.bind(this)
-    this.back = this.back.bind(this)
+    this.transport = this.transport.bind(this)
     this.getPlaybackState = this.getPlaybackState.bind(this)
   }
   getPlaybackState() {
@@ -33,18 +32,8 @@ class Library extends React.Component {
         })
       })
   }
-  skip() {
-    fetch('https://api.spotify.com/v1/me/player/next', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + this.state.accessToken
-      }
-    })
-      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
-      .then(() => this.getPlaybackState())
-  }
-  back() {
-    fetch('https://api.spotify.com/v1/me/player/previous', {
+  transport(endpoint) {
+    fetch('https://api.spotify.com/v1/me/player/' + endpoint, {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + this.state.accessToken
@@ -127,7 +116,7 @@ class Library extends React.Component {
           {songList}
         </div>
         <div className='buffer'></div>
-        <Media songState={this.state.songState} skip={this.skip} back={this.back}/>
+        <Media songState={this.state.songState} transport={this.transport}/>
       </div>
     )
   }
