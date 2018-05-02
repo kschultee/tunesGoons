@@ -40,6 +40,8 @@ class Library extends React.Component {
         'Authorization': 'Bearer ' + this.state.accessToken
       }
     })
+      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+      .then(() => this.getPlaybackState())
   }
   back() {
     fetch('https://api.spotify.com/v1/me/player/previous', {
@@ -48,6 +50,8 @@ class Library extends React.Component {
         'Authorization': 'Bearer ' + this.state.accessToken
       }
     })
+      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+      .then(() => this.getPlaybackState())
   }
   componentDidMount() {
     this.getPlaybackState()
