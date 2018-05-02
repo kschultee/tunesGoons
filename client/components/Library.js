@@ -16,6 +16,9 @@ class Library extends React.Component {
         image: ''
       }
     }
+    this.skip = this.skip.bind(this)
+    this.back = this.back.bind(this)
+    this.getPlaybackState = this.getPlaybackState.bind(this)
   }
   getPlaybackState() {
     fetch('/playback?access_token=' + this.state.accessToken)
@@ -29,6 +32,22 @@ class Library extends React.Component {
           }
         })
       })
+  }
+  skip() {
+    fetch('https://api.spotify.com/v1/me/player/next', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accessToken
+      }
+    })
+  }
+  back() {
+    fetch('https://api.spotify.com/v1/me/player/previous', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accessToken
+      }
+    })
   }
   componentDidMount() {
     this.getPlaybackState()
@@ -104,7 +123,7 @@ class Library extends React.Component {
           {songList}
         </div>
         <div className='buffer'></div>
-        <Media songState={this.state.songState}/>
+        <Media songState={this.state.songState} skip={this.skip} back={this.back}/>
       </div>
     )
   }
