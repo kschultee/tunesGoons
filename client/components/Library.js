@@ -16,6 +16,8 @@ class Library extends React.Component {
         image: ''
       }
     }
+    this.transport = this.transport.bind(this)
+    this.getPlaybackState = this.getPlaybackState.bind(this)
   }
   getPlaybackState() {
     fetch('/playback?access_token=' + this.state.accessToken)
@@ -29,6 +31,16 @@ class Library extends React.Component {
           }
         })
       })
+  }
+  transport(endpoint) {
+    fetch('https://api.spotify.com/v1/me/player/' + endpoint, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accessToken
+      }
+    })
+      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+      .then(() => this.getPlaybackState())
   }
   componentDidMount() {
     this.getPlaybackState()
@@ -104,7 +116,7 @@ class Library extends React.Component {
           {songList}
         </div>
         <div className='buffer'></div>
-        <Media songState={this.state.songState}/>
+        <Media songState={this.state.songState} transport={this.transport}/>
       </div>
     )
   }

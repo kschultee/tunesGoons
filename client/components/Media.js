@@ -39,10 +39,18 @@ class Media extends React.Component {
             </div>
             <div className='button-container'>
               <div onClick={this.play}>
-                <i className="fas fa-play"></i>
+                <i className='fas fa-play'></i>
               </div>
+              <div onClick={() => this.props.transport('previous')}>
+                <i className='fas fa-step-backward'></i>
+              </div>
+            </div>
+            <div className='button-container'>
               <div onClick={this.pause}>
-                <i className="far fa-pause-circle"></i>
+                <i className='far fa-pause-circle'></i>
+              </div>
+              <div onClick={() => this.props.transport('next')}>
+                <i className='fas fa-step-forward'></i>
               </div>
             </div>
           </div>
