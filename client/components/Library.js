@@ -108,6 +108,7 @@ class Library extends React.Component {
         <div>
           {songList}
         </div>
+        <div className='buffer'></div>
         <Media songState={this.state.songState}/>
       </div>
     )

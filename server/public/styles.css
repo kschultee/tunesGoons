@@ -97,3 +97,18 @@ button {
   margin-top: 16px;
   margin-bottom: 16px;
 }
+
+.buffer {
+  height: 100px;
+  clear: both;
+}
+
+.buttons-container {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.fas:hover,
+.far:hover {
+  cursor: pointer;
+}

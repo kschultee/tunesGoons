@@ -37,11 +37,13 @@ class Media extends React.Component {
                 {this.props.songState.artist}
               </div>
             </div>
-            <div onClick={this.play}>
-              <i className="fas fa-play"></i>
-            </div>
-            <div onClick={this.pause}>
-              <i className="far fa-pause-circle"></i>
+            <div className='button-container'>
+              <div onClick={this.play}>
+                <i className="fas fa-play"></i>
+              </div>
+              <div onClick={this.pause}>
+                <i className="far fa-pause-circle"></i>
+              </div>
             </div>
           </div>
         </div>
