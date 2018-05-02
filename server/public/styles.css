@@ -86,3 +86,29 @@ button {
 .App {
   background-color: #303548;
 }
+
+.footer {
+  height: 100px;
+  background-color: #101030;
+}
+
+.media {
+  justify-content: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.buffer {
+  height: 100px;
+  clear: both;
+}
+
+.buttons-container {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.fas:hover,
+.far:hover {
+  cursor: pointer;
+}

@@ -1,21 +1,78 @@
+/* eslint-disable camelcase */
+/* global Spotify */
+
 import React from 'react'
+import Media from './Media.js'
 
 class Library extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      songs: {}
+      songs: {},
+      accessToken: new URLSearchParams(location.search).get('access_token'),
+      songState: {
+        name: '',
+        artist: '',
+        image: ''
+      }
     }
   }
+  getPlaybackState() {
+    fetch('/playback?access_token=' + this.state.accessToken)
+      .then(res => res.json())
+      .then((res) => {
+        this.setState({
+          songState: {
+            name: res.item.name,
+            artist: res.item.artists[0].name,
+            image: res.item.album.images[2].url
+          }
+        })
+      })
+  }
   componentDidMount() {
-    const accessToken = new URLSearchParams(location.search).get('access_token')
-    fetch('/library?access_token=' + accessToken)
+    this.getPlaybackState()
+    fetch('/library?access_token=' + this.state.accessToken)
       .then(res => res.json())
       .then(data =>
         this.setState({
           songs: data.items
         })
       )
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const player = new Spotify.Player({
+        name: 'My Spotify App',
+        getOAuthToken: cb => {
+          cb(this.state.accessToken)
+        },
+        volume: 0.1
+      })
+
+      player.addListener('initialization_error', ({ message }) => {
+        console.error(message)
+      })
+      player.addListener('authentication_error', ({ message }) => {
+        console.error(message)
+      })
+      player.addListener('account_error', ({ message }) => {
+        console.error(message)
+      })
+      player.addListener('playback_error', ({ message }) => {
+        console.error(message)
+      })
+
+      player.addListener('player_state_changed', state => {
+        this.setState({
+          songState: {
+            name: state.track_window.current_track.name,
+            artist: state.track_window.current_track.artists[0].name,
+            image: state.track_window.current_track.album.images[1].url
+          }
+        })
+      })
+
+      player.connect()
+    }
   }
   render() {
     const songList = Array.isArray(this.state.songs) ? (
@@ -46,6 +103,8 @@ class Library extends React.Component {
         <div>
           {songList}
         </div>
+        <div className='buffer'></div>
+        <Media songState={this.state.songState}/>
       </div>
     )
   }
