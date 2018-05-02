@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-/* eslint-disable no-undef */
+/* global Spotify */
 
 import React from 'react'
 import Media from './Media.js'
@@ -69,11 +69,6 @@ class Library extends React.Component {
             image: state.track_window.current_track.album.images[1].url
           }
         })
-        console.log(this.state.songState)
-      })
-
-      player.addListener('ready', ({ device_id }) => {
-        console.log('Ready with Device ID', device_id)
       })
 
       player.connect()
