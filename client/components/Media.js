@@ -44,6 +44,8 @@ class Media extends React.Component {
               <div onClick={this.props.back}>
                 <i className='fas fa-step-backward'></i>
               </div>
+            </div>
+            <div className='button-container'>
               <div onClick={this.pause}>
                 <i className='far fa-pause-circle'></i>
               </div>
