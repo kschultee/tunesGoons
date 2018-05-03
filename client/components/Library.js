@@ -52,6 +52,7 @@ class Library extends React.Component {
       .then(data => {
         if (data.next === null) {
           this.setState({
+            library: [...this.state.library, data.items],
             isMore: false
           })
         }
@@ -142,7 +143,7 @@ class Library extends React.Component {
       null
     )
     const button = this.state.isMore ? (
-      <button type='button' className='btn btn-outline-primary' onClick={this.renderMore}>More</button>
+      <button type='button' className='btn' onClick={this.renderMore}>More</button>
     ) : (
       null
     )
