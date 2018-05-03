@@ -49,7 +49,6 @@ app.get('/callback', (req, res) => {
 })
 
 app.get('/library', (req, res) => {
-  console.log(req.query.url)
   const songOptions = {
     url: req.query.url + '&limit=' + req.query.limit,
     headers: {

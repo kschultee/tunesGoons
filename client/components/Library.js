@@ -142,11 +142,6 @@ class Library extends React.Component {
     ) : (
       null
     )
-    const button = this.state.isMore ? (
-      <button type='button' className='btn' onClick={this.renderMore}>More</button>
-    ) : (
-      null
-    )
     return (
       <div className='container'>
         <div>
@@ -155,7 +150,11 @@ class Library extends React.Component {
         <div>
           {songList}
         </div>
-        {button}
+        {this.state.isMore &&
+          <button type='button' className='btn' onClick={this.renderMore}>
+            More
+          </button>
+        }
         <div className='buffer'></div>
         <Media songState={this.state.songState} transport={this.transport}/>
       </div>
