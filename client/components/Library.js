@@ -118,7 +118,6 @@ class Library extends React.Component {
     }
   }
   render() {
-    console.log(this.state.library, this.state.nextURL)
     const songList = Array.isArray(this.state.songs) ? (
       <table className = 'table table-striped table-hover table-dark'>
         <thead>
@@ -128,12 +127,15 @@ class Library extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {this.state.songs.map(songs => (
-            <tr key={songs.track.name}>
-              <th scope='row'>{songs.track.name}</th>
-              <td>{songs.track.artists[0].name}</td>
-            </tr>
-          ))}
+          {this.state.library.map(songs => (
+            songs.map(songs => (
+              <tr key={songs.track.name}>
+                <th scope='row'>{songs.track.name}</th>
+                <td>{songs.track.artists[0].name}</td>
+              </tr>
+            ))
+          ))
+          }
         </tbody>
       </table>
     ) : (
