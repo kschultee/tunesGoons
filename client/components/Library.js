@@ -15,10 +15,13 @@ class Library extends React.Component {
         artist: '',
         image: ''
       },
-      library: []
+      library: [],
+      isMore: true,
+      nextURL: ''
     }
     this.transport = this.transport.bind(this)
     this.getPlaybackState = this.getPlaybackState.bind(this)
+    this.renderMore = this.renderMore.bind(this)
   }
   getPlaybackState() {
     fetch('/playback?access_token=' + this.state.accessToken)
@@ -43,22 +46,40 @@ class Library extends React.Component {
       .then(() => new Promise(resolve => setTimeout(resolve, 500)))
       .then(() => this.getPlaybackState())
   }
+  renderMore() {
+    fetch('/library?url=' + this.state.nextURL + '&access_token=' + this.state.accessToken)
+      .then(res => res.json())
+      .then(data => {
+        if (data.next === null) {
+          this.setState({
+            isMore: false
+          })
+        }
+        else {
+          this.setState({
+            library: [...this.state.library, data.items],
+            nextURL: data.next
+          })
+        }
+      })
+  }
   componentDidMount() {
     this.getPlaybackState()
     fetch('/library?url=https://api.spotify.com/v1/me/tracks?offset=0&limit=50' + '&access_token=' + this.state.accessToken)
       .then(res => res.json())
       .then(data => {
         if (data.next === null) {
-          console.log('Stop Fetching')
+          this.setState({
+            songs: data.items,
+            isMore: false
+          })
         }
         else {
           this.setState({
             songs: data.items,
-            library: [...this.state.library, data.items]
+            library: [...this.state.library, data.items],
+            nextURL: data.next
           })
-          fetch('/library?url=' + data.next + '&access_token=' + this.state.accessToken)
-            .then(res => res.json())
-            .then(res => console.log(res))
         }
       })
     window.onSpotifyWebPlaybackSDKReady = () => {
@@ -97,6 +118,7 @@ class Library extends React.Component {
     }
   }
   render() {
+    console.log(this.state.library, this.state.nextURL)
     const songList = Array.isArray(this.state.songs) ? (
       <table className = 'table table-striped table-hover table-dark'>
         <thead>
@@ -117,6 +139,11 @@ class Library extends React.Component {
     ) : (
       null
     )
+    const button = this.state.isMore ? (
+      <button type='button' className='btn btn-outline-primary' onClick={this.renderMore}>More</button>
+    ) : (
+      null
+    )
     return (
       <div className='container'>
         <div>
@@ -125,7 +152,7 @@ class Library extends React.Component {
         <div>
           {songList}
         </div>
-        <button type='button' className='btn btn-outline-primary'>More</button>
+        {button}
         <div className='buffer'></div>
         <Media songState={this.state.songState} transport={this.transport}/>
       </div>
