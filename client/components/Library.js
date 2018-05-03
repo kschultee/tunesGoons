@@ -14,7 +14,8 @@ class Library extends React.Component {
         name: '',
         artist: '',
         image: ''
-      }
+      },
+      library: []
     }
     this.transport = this.transport.bind(this)
     this.getPlaybackState = this.getPlaybackState.bind(this)
@@ -44,13 +45,22 @@ class Library extends React.Component {
   }
   componentDidMount() {
     this.getPlaybackState()
-    fetch('/library?access_token=' + this.state.accessToken)
+    fetch('/library?url=https://api.spotify.com/v1/me/tracks?offset=0&limit=50' + '&access_token=' + this.state.accessToken)
       .then(res => res.json())
-      .then(data =>
-        this.setState({
-          songs: data.items
-        })
-      )
+      .then(data => {
+        if (data.next === null) {
+          console.log('Stop Fetching')
+        }
+        else {
+          this.setState({
+            songs: data.items,
+            library: [...this.state.library, data.items]
+          })
+          fetch('/library?url=' + data.next + '&access_token=' + this.state.accessToken)
+            .then(res => res.json())
+            .then(res => console.log(res))
+        }
+      })
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new Spotify.Player({
         name: 'My Spotify App',
@@ -115,6 +125,7 @@ class Library extends React.Component {
         <div>
           {songList}
         </div>
+        <button type='button' className='btn btn-outline-primary'>More</button>
         <div className='buffer'></div>
         <Media songState={this.state.songState} transport={this.transport}/>
       </div>
