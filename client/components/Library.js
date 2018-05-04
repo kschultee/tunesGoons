@@ -22,6 +22,7 @@ class Library extends React.Component {
     this.transport = this.transport.bind(this)
     this.getPlaybackState = this.getPlaybackState.bind(this)
     this.renderMore = this.renderMore.bind(this)
+    this.clickToPlay = this.clickToPlay.bind(this)
   }
   getPlaybackState() {
     fetch('/playback?access_token=' + this.state.accessToken)
@@ -63,6 +64,17 @@ class Library extends React.Component {
           })
         }
       })
+  }
+  clickToPlay(songID) {
+    fetch('https://api.spotify.com/v1/me/player/play', {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accessToken
+      },
+      body: JSON.stringify({'uris': [songID]})
+    })
+      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+      .then(() => this.getPlaybackState())
   }
   componentDidMount() {
     this.getPlaybackState()
@@ -130,7 +142,7 @@ class Library extends React.Component {
         <tbody>
           {this.state.library.map(songs => (
             songs.map(songs => (
-              <tr key={songs.track.name}>
+              <tr key={songs.track.name} onClick={() => this.clickToPlay(songs.track.uri)}>
                 <th scope='row'>{songs.track.name}</th>
                 <td>{songs.track.artists[0].name}</td>
               </tr>
