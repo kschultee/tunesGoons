@@ -101,6 +101,7 @@ button {
 .buffer {
   height: 100px;
   clear: both;
+  position: relative;
 }
 
 .buttons-container {
@@ -111,4 +112,8 @@ button {
 .fas:hover,
 .far:hover {
   cursor: pointer;
+}
+
+.btn {
+  margin-bottom: 12px;
 }
