@@ -65,7 +65,7 @@ app.get('/library', (req, res) => {
 
 app.get('/playback', (req, res) => {
   const playbackOptions = {
-    url: 'https://api.spotify.com/v1/me/player/currently-playing',
+    url: 'https://api.spotify.com/v1/me/player',
     headers: {
       'Authorization': 'Bearer ' + req.query.access_token
     }
