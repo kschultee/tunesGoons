@@ -130,7 +130,7 @@ class Library extends React.Component {
         <tbody>
           {this.state.library.map(songs => (
             songs.map(songs => (
-              <tr key={songs.track.name}>
+              <tr key={songs.track.name} id={songs.track.uri}>
                 <th scope='row'>{songs.track.name}</th>
                 <td>{songs.track.artists[0].name}</td>
               </tr>
