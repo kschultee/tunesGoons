@@ -1,4 +1,5 @@
 import React from 'react'
+import api from '../services/api.js'
 
 class Media extends React.Component {
   constructor() {
@@ -8,22 +9,24 @@ class Media extends React.Component {
     }
     this.pause = this.pause.bind(this)
     this.play = this.play.bind(this)
+    this.next = this.next.bind(this)
+    this.previous = this.previous.bind(this)
   }
   pause() {
-    fetch('https://api.spotify.com/v1/me/player/pause', {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + this.state.accessToken
-      }
-    })
+    api.transport('pause', 'PUT', this.state.accessToken)
   }
   play() {
-    fetch('https://api.spotify.com/v1/me/player/play', {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + this.state.accessToken
-      }
-    })
+    api.transport('play', 'PUT', this.state.accessToken)
+  }
+  next() {
+    api
+      .transport('next', 'POST', this.state.accessToken)
+      .then(() => this.props.getPlaybackState())
+  }
+  previous() {
+    api
+      .transport('pause', 'POST', this.state.accessToken)
+      .then(() => this.props.getPlaybackState())
   }
   render() {
     return (
@@ -41,7 +44,7 @@ class Media extends React.Component {
               <div onClick={this.play}>
                 <i className='fas fa-play'></i>
               </div>
-              <div onClick={() => this.props.transport('previous')}>
+              <div onClick={this.previous}>
                 <i className='fas fa-step-backward'></i>
               </div>
             </div>
@@ -49,7 +52,7 @@ class Media extends React.Component {
               <div onClick={this.pause}>
                 <i className='far fa-pause-circle'></i>
               </div>
-              <div onClick={() => this.props.transport('next')}>
+              <div onClick={this.next}>
                 <i className='fas fa-step-forward'></i>
               </div>
             </div>
