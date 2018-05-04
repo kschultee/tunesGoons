@@ -5,6 +5,7 @@ const path = require('path')
 const express = require('express')
 const request = require('request')
 const querystring = require('querystring')
+const spotify = require('./spotify')
 const app = express()
 
 const publicPath = path.join(__dirname, 'public')
@@ -24,46 +25,29 @@ app.get('/login', (req, res) => {
     }))
 })
 
-app.get('/callback', (req, res) => {
+app.get('/callback', (req, res, next) => {
   const code = req.query.code
-  const authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    form: {
-      code: code,
-      redirect_uri,
-      grant_type: 'authorization_code'
-    },
-    headers: {
-      'Authorization': 'Basic ' + (Buffer.from(
-        process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET
-      ).toString('base64'))
-    },
-    json: true
-  }
-  request.post(authOptions, (error, response, body) => {
-    if (error) throw error
-    let access_token = body.access_token
-    let uri = process.env.LANDING_URI
+  spotify.authorize(code, (err, access_token) => {
+    if (err) return next(err)
+    const uri = process.env.LANDING_URI
     res.redirect(uri + '?access_token=' + access_token)
   })
 })
 
-app.get('/library', (req, res) => {
+app.get('/library', (req, res, next) => {
   const songOptions = {
     url: req.query.url + '&limit=' + req.query.limit,
     headers: {
       'Authorization': 'Bearer ' + req.query.access_token
     }
   }
-  request.get(songOptions, (error, response, body) => {
-    if (error) {
-      res.sendStatus(400)
-    }
+  request.get(songOptions, (err, response, body) => {
+    if (err) return next(err)
     res.send(body)
   })
 })
 
-app.get('/playback', (req, res) => {
+app.get('/playback', (req, res, next) => {
   const playbackOptions = {
     url: 'https://api.spotify.com/v1/me/player',
     headers: {
@@ -71,11 +55,14 @@ app.get('/playback', (req, res) => {
     }
   }
   request.get(playbackOptions, (err, response, body) => {
-    if (err) {
-      res.sendStatus(400)
-    }
+    if (err) return next(err)
     res.send(body)
   })
+})
+
+app.use(function (err, req, res, next) {
+  console.error(err)
+  res.sendStatus(500)
 })
 
 console.log(`Listening on port` + process.env.PORT)
