@@ -3,6 +3,7 @@
 
 import React from 'react'
 import Media from './Media.js'
+import api from '../services/api.js'
 
 class Library extends React.Component {
   constructor(props) {
@@ -16,10 +17,8 @@ class Library extends React.Component {
         image: ''
       },
       library: [],
-      isMore: true,
       nextURL: ''
     }
-    this.transport = this.transport.bind(this)
     this.getPlaybackState = this.getPlaybackState.bind(this)
     this.renderMore = this.renderMore.bind(this)
     this.clickToPlay = this.clickToPlay.bind(this)
@@ -37,43 +36,18 @@ class Library extends React.Component {
         })
       })
   }
-  transport(endpoint) {
-    fetch('https://api.spotify.com/v1/me/player/' + endpoint, {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + this.state.accessToken
-      }
-    })
-      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
-      .then(() => this.getPlaybackState())
-  }
   renderMore() {
     fetch('/library?url=' + this.state.nextURL + '&access_token=' + this.state.accessToken)
       .then(res => res.json())
       .then(data => {
-        if (data.next === null) {
-          this.setState({
-            library: [...this.state.library, data.items],
-            isMore: false
-          })
-        }
-        else {
-          this.setState({
-            library: [...this.state.library, data.items],
-            nextURL: data.next
-          })
-        }
+        this.setState({
+          library: [...this.state.library, data.items],
+          nextURL: data.next
+        })
       })
   }
   clickToPlay(songID) {
-    fetch('https://api.spotify.com/v1/me/player/play', {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + this.state.accessToken
-      },
-      body: JSON.stringify({'uris': [songID]})
-    })
-      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+    api.transport('play', 'PUT', this.state.accessToken, JSON.stringify({'uris': [songID]}))
       .then(() => this.getPlaybackState())
   }
   componentDidMount() {
@@ -131,7 +105,7 @@ class Library extends React.Component {
     }
   }
   render() {
-    const songList = Array.isArray(this.state.songs) ? (
+    const songList = Array.isArray(this.state.songs) && (
       <table className = 'table table-striped table-hover table-dark'>
         <thead>
           <tr>
@@ -140,19 +114,17 @@ class Library extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {this.state.library.map(songs => (
-            songs.map(songs => (
-              <tr key={songs.track.name} onClick={() => this.clickToPlay(songs.track.uri)}>
-                <th scope='row'>{songs.track.name}</th>
-                <td>{songs.track.artists[0].name}</td>
+          {this.state.library.map(sections => (
+            sections.map(song => (
+              <tr key={song.track.name} onClick={() => this.clickToPlay(song.track.uri)}>
+                <th scope='row'>{song.track.name}</th>
+                <td>{song.track.artists[0].name}</td>
               </tr>
             ))
           ))
           }
         </tbody>
       </table>
-    ) : (
-      null
     )
     return (
       <div className='container'>
@@ -162,13 +134,13 @@ class Library extends React.Component {
         <div>
           {songList}
         </div>
-        {this.state.isMore &&
+        {this.state.nextURL &&
           <button type='button' className='btn' onClick={this.renderMore}>
             More
           </button>
         }
         <div className='buffer'></div>
-        <Media songState={this.state.songState} transport={this.transport}/>
+        <Media songState={this.state.songState} getPlaybackState={this.getPlaybackState}/>
       </div>
     )
   }
