@@ -3,6 +3,7 @@
 
 import React from 'react'
 import Media from './Media.js'
+import api from '../services/api.js'
 
 class Library extends React.Component {
   constructor(props) {
@@ -46,14 +47,7 @@ class Library extends React.Component {
       })
   }
   clickToPlay(songID) {
-    fetch('https://api.spotify.com/v1/me/player/play', {
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer ' + this.state.accessToken
-      },
-      body: JSON.stringify({'uris': [songID]})
-    })
-      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+    api.transport('play', 'PUT', this.state.accessToken, JSON.stringify({'uris': [songID]}))
       .then(() => this.getPlaybackState())
   }
   componentDidMount() {
