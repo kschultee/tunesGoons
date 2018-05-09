@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-/* global Spotify */
 
 import React from 'react'
 import Media from './Media.js'
@@ -69,40 +68,6 @@ class Library extends React.Component {
           })
         }
       })
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const player = new Spotify.Player({
-        name: 'My Spotify App',
-        getOAuthToken: cb => {
-          cb(this.state.accessToken)
-        },
-        volume: 0.1
-      })
-
-      player.addListener('initialization_error', ({ message }) => {
-        console.error(message)
-      })
-      player.addListener('authentication_error', ({ message }) => {
-        console.error(message)
-      })
-      player.addListener('account_error', ({ message }) => {
-        console.error(message)
-      })
-      player.addListener('playback_error', ({ message }) => {
-        console.error(message)
-      })
-
-      player.addListener('player_state_changed', state => {
-        this.setState({
-          songState: {
-            name: state.track_window.current_track.name,
-            artist: state.track_window.current_track.artists[0].name,
-            image: state.track_window.current_track.album.images[1].url
-          }
-        })
-      })
-
-      player.connect()
-    }
   }
   render() {
     const songList = Array.isArray(this.state.songs) && (
