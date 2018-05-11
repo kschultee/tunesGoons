@@ -3,6 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Login from './components/Login.js'
 import Library from './components/Library.js'
+import Profile from './components/Profile.js'
 
 class App extends React.Component {
   constructor(props) {
@@ -58,6 +59,9 @@ class App extends React.Component {
     return (
       <div className='App'>
         {this.state.hasAccess ? <Library /> : <Login />}
+        <div className='profile'>
+          <Profile />
+        </div>
       </div>
     )
   }
