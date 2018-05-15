@@ -8,6 +8,14 @@ const api = {
       body: body
     })
       .then(() => new Promise(resolve => setTimeout(resolve, 500)))
+  },
+  user(accessToken) {
+    return fetch('https://api.spotify.com/v1/me', {
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      }
+    })
+      .then(() => new Promise(resolve => setTimeout(resolve, 500)))
   }
 }
 
