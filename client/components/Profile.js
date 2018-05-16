@@ -14,7 +14,7 @@ class Profile extends React.Component {
       .then(res => res.json())
   }
   render() {
-    return null
+    return this.state.user
   }
 }
 
